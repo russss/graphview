@@ -1,0 +1,42 @@
+@background: #666;
+@header_height: 40px;
+
+body { 
+    margin: 0px;
+    font-family: Helvetica, Verdana, Arial, sans-serif;
+    margin-top: 50px;
+    background-color: @background;
+    color: white;
+    cursor: url(img/blank.gif), default;
+}
+
+div#header {
+      position:fixed;
+      width:100%;
+      top:0px;
+      height: @header_height;
+      background-color:#333;
+      padding-left:10px;
+      padding-right:10px;
+      padding-top:5px;
+      padding-bottom:5px
+}
+
+h1 {
+  font-size:40px;
+  padding: 0 0 0 0;
+  margin: 0 0 0 0;
+}
+
+span#date {
+  font-size: @header_height;
+}
+
+div#header-left {
+  float: left;
+}
+
+div#header-right {
+  float: right;
+  padding-right:20px;
+}

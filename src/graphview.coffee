@@ -28,7 +28,9 @@ class GraphView
     })
 
   displayGraph: =>
+    graphConf = @config.graphs[@currentGraph]
     $('#container').html(@graph)
+    $('h1#title').html(graphConf.title)
     @currentGraph = (@currentGraph + 1) % @config.graphs.length
     setTimeout(@displayGraph, @config.settings.dwellTime)
     @preloadGraph(@config.graphs[@currentGraph])
@@ -44,7 +46,8 @@ class GraphView
       from = graph.from
     else
       from = "-#{@config.settings.timeRange} hours"
-    "#{@config.sources.graphite}/render/?width=#{@imageWidth}&height=#{@imageHeight}&target=#{graph.series.join(',')}&from=#{from}&graphOnly=false&hideLegend=true&areaMode=first&lineWidth=2"
+    series = graph.series.concat(@config.settings.graphiteAdditionalSeries)
+    "#{@config.sources.graphite}/render/?width=#{@imageWidth}&height=#{@imageHeight}&target=#{series.join(',')}&from=#{from}&graphOnly=false&hideLegend=true&areaMode=first&lineWidth=2"
 
   getCactiURL: (graph) ->
     endTime = Math.floor((new Date().getTime())/1000)
@@ -60,11 +63,24 @@ class GraphView
                   @setUp())
 
   updateWindowSize: =>
-    @imageHeight = $(window).height()
+    @imageHeight = $(window).height() - 50
     @imageWidth = $(window).width()
 
   start: => @loadConfig()
 
+renderDate = ->
+  date = new Date
+  "#{date.getUTCFullYear()}/#{date.getUTCMonth() + 1}/#{date.getUTCDate()} #{date.getUTCHours()}:#{date.getUTCMinutes()}:#{date.getUTCSeconds()} UTC"
+
+updateDate = ->
+  $('span#date').html(renderDate())
+  setTimeout(updateDate, 500)
+
 gv = new GraphView
 
-$(document).ready(gv.start)
+$(document).ready(-> 
+   gv.start()
+   updateDate()
+)
+
+
