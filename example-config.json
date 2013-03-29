@@ -1,0 +1,23 @@
+{
+  "settings": {
+    "dwellTime": 10000,
+    "timeRange": 12,
+    "graphiteAdditionalSeries": ["drawAsInfinite(events.deploy)"]
+  },
+
+  "sources": {
+    "graphite": "http://graphite",
+    "cacti": "http://host/cacti",
+    "jenkins": "http://jenkins"
+  },
+
+  "graphs": [
+    {"source": "graphite", "title": "Web Traffic",
+      "series": ["movingAverage(web.http_2xx,10)",
+                  "web.http_5xx",
+                  "movingAverage(timeShift(web.http_2xx,'1d'),10)"]},
+    {"source": "iframe", "title": "Page Gen time",
+      "url": "https://rpm.newrelic.com/public/charts/xxxxxxxxx"},
+    {"source": "cacti", "id": "19" , "title": "Outbound Bandwidth"}
+  ]
+}
