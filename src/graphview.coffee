@@ -3,19 +3,35 @@ class GraphView
   setUp: =>
     @updateWindowSize()
     $(window).resize(@updateWindowSize)
-    @currentImage = 0
-    @preloadImage(@getURL(@config.graphs[0]))
-    @displayImage()
+    @currentGraph = 0
+    @preloadGraph(@config.graphs[0])
+    @displayGraph()
+
+  preloadGraph: (graph) ->
+    if graph.source == 'iframe'
+      @preloadIframe(graph.url)
+    else
+      @preloadImage(@getURL(graph))
 
   preloadImage: (url) ->
-    @img = new Image()
-    @img.src = url
+    @graph = new Image()
+    @graph.src = url
 
-  displayImage: =>
-    $('#container').html(@img)
-    @currentImage = (@currentImage + 1) % @config.graphs.length
-    setTimeout(@displayImage, @config.settings.dwellTime)
-    @preloadImage(@getURL(@config.graphs[@currentImage]))
+  preloadIframe: (url) ->
+    @graph = $(document.createElement('iframe'))
+    @graph.attr({
+      src: url,
+      width: @imageWidth, 
+      height: @imageHeight,
+      scrolling: "no",
+      frameborder: "no"
+    })
+
+  displayGraph: =>
+    $('#container').html(@graph)
+    @currentGraph = (@currentGraph + 1) % @config.graphs.length
+    setTimeout(@displayGraph, @config.settings.dwellTime)
+    @preloadGraph(@config.graphs[@currentGraph])
 
   getURL: (graph) ->
     if graph.source == 'graphite'
