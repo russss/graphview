@@ -1,5 +1,6 @@
 
 class GraphView
+
   setUp: =>
     @updateWindowSize()
     $(window).resize(@updateWindowSize)
@@ -55,7 +56,7 @@ class GraphView
     "#{@config.sources.cacti}/graph_image.php?action=zoom&local_graph_id=#{graph.id}&rra_id=0&graph_height=#{@imageHeight}&graph_width=#{@imageWidth}&graph_nolegend=1&graph_end=#{endTime}&graph_start=#{startTime}&view_type=tree&notitle=1"
 
   loadConfig: ->
-    $.ajax('config.json')
+    $.ajax('config.json', {'dataType': 'json'})
       .fail((x, status, error) -> 
           $('#container').html("Error loading config: #{status} (#{error})"))
       .success((data) => 
@@ -68,9 +69,14 @@ class GraphView
 
   start: => @loadConfig()
 
+zeroPad = (value) ->
+  value = value.toString()
+  value = "0" + value while (value.length < 2)
+  value
+
 renderDate = ->
   date = new Date
-  "#{date.getUTCFullYear()}/#{date.getUTCMonth() + 1}/#{date.getUTCDate()} #{date.getUTCHours()}:#{date.getUTCMinutes()}:#{date.getUTCSeconds()} UTC"
+  "#{date.getUTCFullYear()}/#{zeroPad(date.getUTCMonth() + 1)}/#{zeroPad(date.getUTCDate())} #{zeroPad(date.getUTCHours())}:#{zeroPad(date.getUTCMinutes())}:#{zeroPad(date.getUTCSeconds())} UTC"
 
 updateDate = ->
   $('span#date').html(renderDate())
