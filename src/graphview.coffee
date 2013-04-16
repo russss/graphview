@@ -2,6 +2,7 @@
 class GraphView
 
   setUp: =>
+    @graphLoaded = false
     @updateWindowSize()
     $(window).resize(@updateWindowSize)
     @currentGraph = 0
@@ -16,6 +17,9 @@ class GraphView
 
   preloadImage: (url) ->
     @graph = new Image()
+    $(@graph).bind('load', =>
+      @graphLoaded = true
+    )
     @graph.src = url
 
   preloadIframe: (url) ->
@@ -27,12 +31,18 @@ class GraphView
       scrolling: "no",
       frameborder: "no"
     })
+    @graphLoaded = true
 
   displayGraph: =>
+    if not @graphLoaded
+      # Wait for our image to load
+      setTimeout(@displayGraph, 1000)
+      return
     graphConf = @config.graphs[@currentGraph]
     $('#container').html(@graph)
     $('h1#title').html(graphConf.title)
     @currentGraph = (@currentGraph + 1) % @config.graphs.length
+    @graphLoaded = false
     setTimeout(@displayGraph, @config.settings.dwellTime)
     @preloadGraph(@config.graphs[@currentGraph])
 
