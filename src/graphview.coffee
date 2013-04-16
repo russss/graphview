@@ -74,7 +74,7 @@ class GraphView
                   @setUp())
 
   updateWindowSize: =>
-    @imageHeight = $(window).height() - 50
+    @imageHeight = $(window).height() - 60
     @imageWidth = $(window).width()
 
   start: => @loadConfig()
