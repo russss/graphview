@@ -1,5 +1,6 @@
 all:
-	coffee -c -o ./lib/ ./src/
+	coffee -m -c -o ./lib/ ./src/
+	cp ./src/*.coffee ./lib
 
 dev:
-	coffee -o ./lib -cw ./src
+	coffee -m -o ./lib -cw ./src
