@@ -3,6 +3,12 @@ class GraphView
 
   setUp: =>
     @graphLoaded = false
+
+    if not @config.settings.header ? true
+      $('#header').hide()
+    if not @config.settings.clock ? true
+      $('#date').hide()
+
     @updateWindowSize()
     $(window).resize(@updateWindowSize)
     @currentGraph = 0
@@ -43,6 +49,7 @@ class GraphView
     $('h1#title').html(graphConf.title)
     @currentGraph = (@currentGraph + 1) % @config.graphs.length
     @graphLoaded = false
+    console.log(@config.settings.dwellTime)
     setTimeout(@displayGraph, @config.settings.dwellTime)
     @preloadGraph(@config.graphs[@currentGraph])
 
@@ -58,7 +65,7 @@ class GraphView
     else
       from = "-#{@config.settings.timeRange} hours"
     series = graph.series.concat(@config.settings.graphiteAdditionalSeries)
-    "#{@config.sources.graphite}/render/?width=#{@imageWidth}&height=#{@imageHeight}&target=#{series.join(',')}&from=#{from}&graphOnly=false&hideLegend=true&areaMode=first&lineWidth=2"
+    "#{@config.sources.graphite}/render/?width=#{@imageWidth}&height=#{@imageHeight}&target=#{series.join('&target=')}&from=#{from}&graphOnly=false&hideLegend=true&areaMode=first&lineWidth=2"
 
   getCactiURL: (graph) ->
     endTime = Math.floor((new Date().getTime())/1000)
@@ -66,7 +73,9 @@ class GraphView
     "#{@config.sources.cacti}/graph_image.php?action=zoom&local_graph_id=#{graph.id}&rra_id=0&graph_height=#{@imageHeight}&graph_width=#{@imageWidth}&graph_nolegend=1&graph_end=#{endTime}&graph_start=#{startTime}&view_type=tree&notitle=1"
 
   loadConfig: ->
-    $.ajax('config.json', {'dataType': 'json'})
+    url = $.url().param('config') ? 'config.json'
+
+    $.ajax(url, {'dataType': 'json'})
       .fail((x, status, error) -> 
           $('#container').html("Error loading config: #{status} (#{error})"))
       .success((data) => 
