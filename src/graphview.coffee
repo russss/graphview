@@ -64,8 +64,16 @@ class GraphView
       from = graph.from
     else
       from = "-#{@config.settings.timeRange} hours"
-    series = graph.series.concat(@config.settings.graphiteAdditionalSeries)
-    "#{@config.sources.graphite}/render/?width=#{@imageWidth}&height=#{@imageHeight}&target=#{series.join('&target=')}&from=#{from}&graphOnly=false&hideLegend=true&areaMode=first&lineWidth=2"
+    if not graph.noAdditional?
+      series = graph.series.concat(@config.settings.graphiteAdditionalSeries)
+    url = "#{@config.sources.graphite}/render/?width=#{@imageWidth}&height=#{@imageHeight}"
+    url += "&target=#{series.join('&target=')}&from=#{from}"
+    url += "&graphOnly=false&hideLegend=true&areaMode=first&lineWidth=2"
+    if graph.yMin?
+      url += "&yMin=#{graph.yMin}"
+    if graph.yMax?
+      url += "&yMax=#{graph.yMax}"
+    url
 
   getCactiURL: (graph) ->
     endTime = Math.floor((new Date().getTime())/1000)

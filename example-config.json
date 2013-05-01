@@ -2,7 +2,9 @@
   "settings": {
     "dwellTime": 10000,
     "timeRange": 12,
-    "graphiteAdditionalSeries": ["drawAsInfinite(events.deploy)"]
+    "graphiteAdditionalSeries": ["drawAsInfinite(events.deploy)"],
+    "header": true,
+    "clock": true
   },
 
   "sources": {
