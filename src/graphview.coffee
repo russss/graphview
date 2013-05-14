@@ -64,8 +64,9 @@ class GraphView
       from = graph.from
     else
       from = "-#{@config.settings.timeRange} hours"
+    series = graph.series
     if not graph.noAdditional?
-      series = graph.series.concat(@config.settings.graphiteAdditionalSeries)
+      series = series.concat(@config.settings.graphiteAdditionalSeries)
     url = "#{@config.sources.graphite}/render/?width=#{@imageWidth}&height=#{@imageHeight}"
     url += "&target=#{series.join('&target=')}&from=#{from}"
     url += "&graphOnly=false&hideLegend=true&areaMode=first&lineWidth=2"
