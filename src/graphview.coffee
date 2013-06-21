@@ -2,7 +2,7 @@
 class GraphView
 
   setUp: =>
-    @graphLoaded = false
+    @contentLoaded = false
 
     if not @config.settings.header ? true
       $('#header').hide()
@@ -11,11 +11,11 @@ class GraphView
 
     @updateWindowSize()
     $(window).resize(@updateWindowSize)
-    @currentGraph = 0
-    @preloadGraph(@config.graphs[0])
-    @displayGraph()
+    @currentScreen = 0
+    @preloadContent(@config.graphs[0])
+    @displayContent()
 
-  preloadGraph: (graph) ->
+  preloadContent: (graph) ->
     if graph.source == 'iframe'
       @preloadIframe(graph.url)
     else
@@ -23,35 +23,35 @@ class GraphView
 
   preloadImage: (url) ->
     @loadStart = new Date()
-    @graph = new Image()
-    $(@graph).bind('load', =>
-      @graphLoaded = true
+    @content = new Image()
+    $(@content).bind('load', =>
+      @contentLoaded = true
     )
-    @graph.src = url
+    @content.src = url
 
   preloadIframe: (url) ->
-    @graph = $(document.createElement('iframe'))
-    @graph.attr({
+    @content = $(document.createElement('iframe'))
+    @content.attr({
       src: url,
       width: @imageWidth, 
       height: @imageHeight,
       scrolling: "no",
       frameborder: "no"
     })
-    @graphLoaded = true
+    @contentLoaded = true
 
-  displayGraph: =>
+  displayContent: =>
     # Wait for our image to load, but not more than 2 minutes
-    if not @graphLoaded and ((new Date()) - @loadStart) < 120000
-      setTimeout(@displayGraph, 1000)
+    if not @contentLoaded and ((new Date()) - @loadStart) < 120000
+      setTimeout(@displayContent, 1000)
       return
-    graphConf = @config.graphs[@currentGraph]
-    $('#container').html(@graph)
+    graphConf = @config.graphs[@currentScreen]
+    $('#container').html(@content)
     $('h1#title').html(graphConf.title)
-    @currentGraph = (@currentGraph + 1) % @config.graphs.length
-    @graphLoaded = false
-    setTimeout(@displayGraph, @config.settings.dwellTime)
-    @preloadGraph(@config.graphs[@currentGraph])
+    @currentScreen = (@currentScreen + 1) % @config.graphs.length
+    @contentLoaded = false
+    setTimeout(@displayContent, @config.settings.dwellTime)
+    @preloadContent(@config.graphs[@currentScreen])
 
   getURL: (graph) ->
     if graph.source == 'graphite'
