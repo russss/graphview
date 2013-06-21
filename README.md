@@ -11,9 +11,10 @@ Relic), Jenkins build status (currently poorly styled), as well showing the time
 
 ## Usage
 
-Check out example-config.json for how to configure. It needs to be
-served from a webserver to work. It will try and load config.json by
-default; you can override using ?config=filename.json.
+Graphview needs to be served from a webserver to work.
+
+Check out example-config.json for how to configure. It will try and load `config.json` by
+default; you can override using `?config=filename.json`.
 
 ## Credits
 
