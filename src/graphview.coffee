@@ -2,8 +2,6 @@
 class GraphView
 
   setUp: =>
-    @contentLoaded = false
-
     if not @config.settings.header ? true
       $('#header').hide()
     if not @config.settings.clock ? true
@@ -17,6 +15,8 @@ class GraphView
     @displayContent()
 
   preloadContent: (graph) ->
+    @contentLoaded = false
+    @loadStart = new Date()
     switch graph.source
       when "iframe" then @preloadIframe(graph.url)
       when "graphite", "cacti" then @preloadImage(@getURL(graph))
@@ -26,7 +26,6 @@ class GraphView
         @contentLoaded = true
 
   preloadImage: (url) ->
-    @loadStart = new Date()
     @content = new Image()
     $(@content).bind('load', =>
       @contentLoaded = true
@@ -49,22 +48,23 @@ class GraphView
     url = "#{@config.sources.jenkins}/api/json?jsonp=?"
     $.getJSON(url, (data) =>
       for job in data.jobs
-        if job.name in jobs
+        if jobs == "all" or job.name in jobs
           job_data.push({"name": job.name, "status": job.color})
       @content = @jenkinsTemplate({"jobs": job_data})
       @contentLoaded = true
+      console.log("Jenkins loaded")
     )
 
   displayContent: =>
     # Wait for our image to load, but not more than 2 minutes
     if not @contentLoaded and ((new Date()) - @loadStart) < 120000
+      console.log("displayContent wait...")
       setTimeout(@displayContent, 1000)
       return
     graphConf = @config.graphs[@currentScreen]
     $('#container').html(@content)
     $('h1#title').html(graphConf.title)
     @currentScreen = (@currentScreen + 1) % @config.graphs.length
-    @contentLoaded = false
     setTimeout(@displayContent, @config.settings.dwellTime)
     @preloadContent(@config.graphs[@currentScreen])
 
