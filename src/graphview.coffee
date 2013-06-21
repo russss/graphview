@@ -52,13 +52,11 @@ class GraphView
           job_data.push({"name": job.name, "status": job.color})
       @content = @jenkinsTemplate({"jobs": job_data})
       @contentLoaded = true
-      console.log("Jenkins loaded")
     )
 
   displayContent: =>
     # Wait for our image to load, but not more than 2 minutes
     if not @contentLoaded and ((new Date()) - @loadStart) < 120000
-      console.log("displayContent wait...")
       setTimeout(@displayContent, 1000)
       return
     graphConf = @config.graphs[@currentScreen]
