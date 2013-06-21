@@ -20,6 +20,9 @@
                   "movingAverage(timeShift(web.http_2xx,'1d'),10)"]},
     {"source": "iframe", "title": "Page Gen time",
       "url": "https://rpm.newrelic.com/public/charts/xxxxxxxxx"},
-    {"source": "cacti", "id": "19" , "title": "Outbound Bandwidth"}
+    {"source": "cacti", "id": "19" , "title": "Outbound Bandwidth"},
+    {"source": "jenkins", "title": "Build Status",
+                       "jobs": ["taskname1", "taskname2"]},
+
   ]
 }
