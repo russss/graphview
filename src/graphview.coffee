@@ -22,6 +22,7 @@ class GraphView
       @preloadImage(@getURL(graph))
 
   preloadImage: (url) ->
+    @loadStart = new Date()
     @graph = new Image()
     $(@graph).bind('load', =>
       @graphLoaded = true
@@ -40,8 +41,8 @@ class GraphView
     @graphLoaded = true
 
   displayGraph: =>
-    if not @graphLoaded
-      # Wait for our image to load
+    # Wait for our image to load, but not more than 2 minutes
+    if not @graphLoaded and ((new Date()) - @loadStart) < 120000
       setTimeout(@displayGraph, 1000)
       return
     graphConf = @config.graphs[@currentGraph]
@@ -49,7 +50,6 @@ class GraphView
     $('h1#title').html(graphConf.title)
     @currentGraph = (@currentGraph + 1) % @config.graphs.length
     @graphLoaded = false
-    console.log(@config.settings.dwellTime)
     setTimeout(@displayGraph, @config.settings.dwellTime)
     @preloadGraph(@config.graphs[@currentGraph])
 
