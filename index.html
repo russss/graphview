@@ -11,8 +11,18 @@
     <div id="header-right"><span id="date"></span></div>
   </div>
   <div id="container">Loading...</div>
+
+  <script id="jenkins-template" type="text/x-handlebars-template">
+<div class="jenkins">
+  {{#each jobs}}
+    <div class="job {{status}}">{{name}}</div>
+  {{/each}}
+</div>
+  </script>
+
   <script type="text/javascript" src="lib/jquery.js"></script>
   <script type="text/javascript" src="lib/purl.js"></script>
+  <script type="text/javascript" src="lib/handlebars.js"></script>
   <script type="text/javascript" src="lib/graphview.js"></script>
   </body>
 </html>
