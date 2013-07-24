@@ -82,7 +82,9 @@ class GraphView
       series = series.concat(@config.settings.graphiteAdditionalSeries)
     url = "#{@config.sources.graphite}/render/?width=#{@imageWidth}&height=#{@imageHeight}"
     url += "&target=#{series.join('&target=')}&from=#{from}"
-    url += "&graphOnly=false&hideLegend=true&areaMode=first&lineWidth=2"
+    url += "&graphOnly=false&areaMode=first&lineWidth=2"
+    if not @config.settings.showLegend
+      url += "&hideLegend=true"
     if graph.yMin?
       url += "&yMin=#{graph.yMin}"
     if graph.yMax?
