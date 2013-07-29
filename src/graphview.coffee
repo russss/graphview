@@ -82,6 +82,11 @@ class GraphView
       series = series.concat(@config.settings.graphiteAdditionalSeries)
     url = "#{@config.sources.graphite}/render/?width=#{@imageWidth}&height=#{@imageHeight}"
     url += "&target=#{series.join('&target=')}&from=#{from}"
+    if graph.colorList?
+      colors = graph.colorList
+      if "#" in colors
+        colors = colors.replace("#","%23")
+      url += "&colorList=#{colors}"
     url += "&graphOnly=false"
     if graph.areaMode?
       url += "&areaMode=#{graph.areaMode}"
