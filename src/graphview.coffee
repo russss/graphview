@@ -89,6 +89,8 @@ class GraphView
       url += "&yMin=#{graph.yMin}"
     if graph.yMax?
       url += "&yMax=#{graph.yMax}"
+    if graph.fontSize?
+      url += "&fontSize=#{graph.fontSize}"
     url
 
   getCactiURL: (graph) ->
