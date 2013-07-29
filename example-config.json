@@ -14,7 +14,7 @@
   },
 
   "graphs": [
-    {"source": "graphite", "title": "Web Traffic", "fontSize": 10,
+    {"source": "graphite", "title": "Web Traffic", "fontSize": 10, "areaMode": "first",
       "series": ["movingAverage(web.http_2xx,10)",
                   "web.http_5xx",
                   "movingAverage(timeShift(web.http_2xx,'1d'),10)"]},
