@@ -82,13 +82,25 @@ class GraphView
       series = series.concat(@config.settings.graphiteAdditionalSeries)
     url = "#{@config.sources.graphite}/render/?width=#{@imageWidth}&height=#{@imageHeight}"
     url += "&target=#{series.join('&target=')}&from=#{from}"
-    url += "&graphOnly=false&areaMode=first&lineWidth=2"
+    if graph.colorList?
+      colors = graph.colorList
+      if "#" in colors
+        colors = colors.replace("#","%23")
+      url += "&colorList=#{colors}"
+    url += "&graphOnly=false"
+    if graph.areaMode?
+      url += "&areaMode=#{graph.areaMode}"
+    else
+      url += "&areaMode=first"
+    url+= "&lineWidth=2"
     if not @config.settings.showLegend
       url += "&hideLegend=true"
     if graph.yMin?
       url += "&yMin=#{graph.yMin}"
     if graph.yMax?
       url += "&yMax=#{graph.yMax}"
+    if graph.fontSize?
+      url += "&fontSize=#{graph.fontSize}"
     url
 
   getCactiURL: (graph) ->
