@@ -101,6 +101,8 @@ class GraphView
       url += "&yMax=#{graph.yMax}"
     if graph.fontSize?
       url += "&fontSize=#{graph.fontSize}"
+    if graph.logBase?
+      url += "&logBase=#{graph.logBase}"
     url
 
   getCactiURL: (graph) ->
